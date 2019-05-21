@@ -2,13 +2,16 @@
   "name": "lab_201",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "admin.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "live-server"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^4.3.1"
+    "bootstrap": "^4.3.1",
+    "jquery": "^1.9.1",
+    "live-server": "^1.2.1",
+    "popper.js": "^1.14.7"
   }
 }
