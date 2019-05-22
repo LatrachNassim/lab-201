@@ -1,7 +1,7 @@
 
 
 // Initialisation de Firebase
-firebase.initializeApp;
+firebase.initializeApp(firebaseConfig);
 
 // --------------------------------------------
 // Initialisation des gestionnaires d'événement
@@ -15,131 +15,93 @@ $('#loginForm').on('submit', emailPasswordLogin);
 // ----------------------------------------
 
 function emailPasswordLogin(event) {
-    event.preventDefault();
+	event.preventDefault();
 
-    const email = $('#emailField').val();
-    const password = $('#passwordField').val();
+	const email = $('#inputEmail').val();
+	const password = $('#inputPassword').val();
 
-    // Votre code ici ...
-    // Utilisez les variables 'email' et 'password' pour les transmettre à Firebase via le provider "Email/Password"
-    firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(function (result) {
-            console.log('Succès de l\'authentification', result);
+	// Votre code ici ...
+	// Utilisez les variables 'email' et 'password' pour les transmettre à Firebase via le provider "Email/Password"
+	firebase.auth().signInWithEmailAndPassword(email, password)
+		.then(function (result) {
+			console.log('Succès de l\'authentification', result);
 
-            $('section#results').html(`
+			$('section#concerts-list').html(`
             <h3>Vous êtes bien connecté ${email} !</h3>
         `);
-        })
-        .catch(function (error) {
-            console.log("Une erreur s'est produite", error.message);
+			displayConcerts();
+		})
+		.catch(function (error) {
+			console.log("Une erreur s'est produite", error.message);
 
-            $('section#results').html(`
+			$('section#results').html(`
             <div class="alert alert-danger">${error.message}</div>
         `);
-        });
+		});
 }
 
+$('#login-form').submit(emailPasswordLogin);
 
-// Initialisation de Firebase
-firebase.initializeApp;
+function displayConcerts() {
+	firebase.database().ref('/concerts').once('value').then(function (concertsObj) {
+		concertsObj = concertsObj.val();
 
-// Initialisation des gestionnaires d'événement
-$('#addMessageForm').on('submit', onAddMessage);
-$('#addUserForm').on('submit', onAddUser);
 
-// ----------------------------------------
-// 1) [À FAIRE] Complétez les gestionnaires d'événement onAddMessage() et onAddUser()
-// ----------------------------------------
 
-function onAddMessage(event) {
-    event.preventDefault();
+		for (let key in concertsObj) {
+			const concert = concertsObj[key];
 
-    const pseudo = $('#pseudo').val();
-    const message = $('#message').val();
 
-    // Votre code ici ...
-    // Ajouter le pseudo et le message dans la database ...
-    firebase.database().ref(`/messages`).push({
-        pseudo: pseudo,
-        message: message
-    });
+			const container = $('<div class=\'concert-elt\'></div>');
+			const dateConcert = $(`<p>Date : ${concert['date']}</p>`);
+			const festival = $(`<p>Festival : ${concert['festival']}</p>`);
+			const lieux = $(`<p>Lieux : ${concert['lieu']}</p>`);
+	  		const pays = $(`<p>pays : ${concert['pays'] }</p>`);
+	  		const ville = $(`<p>ville : ${concert['ville'] }</p>`);
+
+
+			container.append([dateConcert, festival, lieux, pays, ville]);
+			$('section#concerts-list').append(container);
+
+		}
+
+
+
+	});
 }
 
-function onAddUser(event) {
-    event.preventDefault();
+function writeNewPost(date, lieu, pays, ville, festival) {
+	// A post entry.
+	let concerts = {
+		author: date,
+		uid: lieu,
+		body: pays,
+		title: ville,
+		starCount: festival
 
-    const nom = $('#nom').val();
-    
+	};
 
-    // Votre code ici ...
-    // Ajouter le nom et l'age dans la database ...
-    firebase.database().ref(`/Utilisateur`).push({
-        nom: nom,
-        age: age
-    });
+	const newPostKey = firebase.database().ref().child('posts').push().key;
+
+	let updates = {};
+	updates['/posts/' + newPostKey] = postData;
+	updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+	return firebase.database().ref().update(updates);
 }
 
+function addconcert() {
+	const concertsRef = firebase.database().ref('concerts');
 
+	const newConcertRef = concertsRef.push();
+	newConcertRef.set({
+		date: '04/06/19',
+		lieu: 'Huntington Bank Pavillon at Northerly Island',
+		pays: 'Illinois, Etats-Unis',
+		ville: 'Chicago',
+		festival: 'Anderson Paak'
+	})
+}
 
-// ----------------------------------------
-// 2) [À FAIRE] Écrivez le code qui permet de récupérer les messages ET les utilisateurs de la base
-// ----------------------------------------
-
-// Récupération des messages...
-firebase.database().ref(`/messages`).on('value', function (snapshot) {
-    let template = '';
-    snapshot.forEach(function (item) {
-        const { pseudo, message } = item.val();
-
-        template += `<li>${pseudo} dit : "${message}"</li>`
-    });
-    $(`messages`).html(template);
-});
-
-// Récupération des utilisateurs...
-firebase.database().ref(`/Utilisateur`).on('value', function (snapshot) {
-    let template = '';
-    snapshot.forEach(function (item) {
-        const usersObj = item.val();
-
-        template += `<li>${usersObj.nom} dit : "${usersObj.age}"</li>`
-    });
-    $(`Utilisateur`).html(template);
-});
-
-firebase.initializeApp;
-
-// 2. [À FAIRE] Récupérez la liste des consoles de jeu et affichez-les dans le HTML ...
-// Le HTML à utiliser por chaque console est le suivant :
-/*
-    <div class="card d-flex flex-column justify-content-end">
-        <img class="card-img-top" src="images/consoles/<IMAGE>" alt="<NOM>">
-        <div class="card-body" style="flex: initial">
-            <h5 class="card-title"><NOM></h5>
-            <p class="card-text"><CONSTRUCTEUR> / <PRIX>} €</p>
-        </div>
-    </div>
-*/
-
-const consolesRef = firebase.firestore().collection(`concerts`);
-
-concertRef.get().then(function (querySnapshot) {
-    let template = '';
-    querySnapshot.forEach(function (doc) {
-        const consoleJeu = doc.data();
-
-        console.log(consoleJeu);
-
-        template += `<div class="card d-flex flex-column justify-content-end">
-                            <img class="card-img-top" src="images/consoles/${consoleJeu.image}" alt="${consoleJeu.nom}">
-                            <div class="card-body" style="flex: initial">
-                                <h5 class="card-title">${consoleJeu.nom}</h5>
-                                <p class="card-text">${consoleJeu.constructeur} / ${consoleJeu.prix} €</p>
-                            </div>
-                        </div>`;
-    });
-    $(`#concerts`).html(template);
-});
-
-
+addconcert();
 
