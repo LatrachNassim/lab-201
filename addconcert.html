@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Page admin</title>
+  <title>Page ajout concert</title>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -19,30 +19,13 @@
 </head>
 
 <body class="text-center">
-    <a href="index.html">Retour</a>
+   
+    <a href="admin.html">Retour à l'accueil</a>
+  <form class="form-signin" id="addconcert-form">
     
-  <form class="form-signin" id="login-form">
-    
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    
-    <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p>
-  </form>
-
-  <form class="form-signin display-none" id="update-form">
-    
-    <h1 class="h3 mb-3 font-weight-normal">Modifier concert</h1>
+    <h1 class="h3 mb-3 font-weight-normal">Ajouter un concert</h1>
     <label for="inputDate" class="sr-only">date</label>
-    <input type="text" id="inputDate" class="form-control" placeholder="date" required autofocus>
+    <input type="date" id="inputDate" class="form-control" placeholder="date" required autofocus>
     <label for="inputFestival" class="sr-only">festival</label>
     <input type="festival" id="inputFestival" class="form-control" placeholder="festival" required autofocus>
     <label for="inputLieu" class="sr-only">lieu</label>
@@ -52,17 +35,12 @@
     <label for="inputVille" class="sr-only">ville</label>
     <input type="ville" id="inputVille" class="form-control" placeholder="ville" required autofocus>
     
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Ajouter</button>
     
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Valider modifie</button>
-    
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p>
   </form>
-  <section id='results'>
-   
-  </section>
-  <section id='concerts-list'>
-    <p><a href="addconcert.html">Ajouter un nouveau concert</a></p>
-     
-    </section>
+  
+  
   <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="

@@ -19,3 +19,12 @@
       font-size: 3.5rem;
     }
   }
+
+.display-none {
+  display: none;
+}
+
+.update-btn{
+  background-color:'#34DCED';
+}
+
